@@ -16,7 +16,7 @@ pip install dataclasses-codec
 
 ## Usage
 
-The package provides default functions to easily convert dataclasses into and from a serialized form.
+The package provides functions to easily convert dataclasses into and from a serialized form. It uses by default the `json_codec` instance the package provides.
 
 ```python
 from dataclasses import dataclass
