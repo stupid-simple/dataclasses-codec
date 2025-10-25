@@ -3,7 +3,6 @@ Tests for JSONCodec functionality.
 """
 
 import unittest
-import json
 import datetime as dt
 from dataclasses import dataclass, field
 from typing import List, Optional, Union, Any, Dict
@@ -174,11 +173,11 @@ class TestJSONCodec(unittest.TestCase):
     def test_to_json(self):
         obj = SimpleClass("Alice", 30)
         result = self.codec.to_json(obj)
-        expected = json.dumps({"name": "Alice", "age": 30})
+        expected = '{"name": "Alice", "age": 30}'
         self.assertEqual(result, expected)
     
     def test_from_json(self):
-        json_str = json.dumps({"name": "Alice", "age": 30})
+        json_str = '{"name": "Alice", "age": 30}'
         result = self.codec.from_json(SimpleClass, json_str)
         expected = SimpleClass("Alice", 30)
         self.assertEqual(result, expected)

@@ -3,7 +3,6 @@ Tests for mixin classes.
 """
 
 import unittest
-import json
 from dataclasses import dataclass, field
 from dataclasses_codec import (
     JSONSerializable, JSONDeserializable, 
@@ -63,14 +62,14 @@ class TestSerializable(unittest.TestCase):
     def test_to_json_default_codec(self):
         obj = SerializableClass("Alice", 30)
         result = obj.to_json()
-        expected = json.dumps({"name": "Alice", "age": 30})
+        expected = '{"name": "Alice", "age": 30}'
         self.assertEqual(result, expected)
     
     def test_to_json_custom_codec(self):
         obj = SerializableClass("Alice", 30)
         custom_codec = TestCodec()
         result = obj.to_json(codec=custom_codec)
-        expected = json.dumps({"name": "test_Alice", "age": 30})
+        expected = '{"name": "test_Alice", "age": 30}'
         self.assertEqual(result, expected)
     
     def test_to_json_with_kwargs(self):
@@ -97,13 +96,13 @@ class TestDeserializable(unittest.TestCase):
         self.assertEqual(result, expected)
     
     def test_from_json_default_codec(self):
-        json_str = json.dumps({"name": "Alice", "age": 30})
+        json_str = '{"name": "Alice", "age": 30}'
         result = DeserializableClass.from_json(json_str)
         expected = DeserializableClass("Alice", 30)
         self.assertEqual(result, expected)
     
     def test_from_json_custom_codec(self):
-        json_str = json.dumps({"name": "test_Alice", "age": 30})
+        json_str = '{"name": "test_Alice", "age": 30}'
         custom_codec = TestCodec()
         result = DeserializableClass.from_json(json_str, codec=custom_codec)
         expected = DeserializableClass("Alice", 30)

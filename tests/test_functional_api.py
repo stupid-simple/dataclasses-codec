@@ -3,10 +3,9 @@ Tests for functional API (encode, decode, to_json, from_json).
 """
 
 import unittest
-import json
 from dataclasses import dataclass
 from dataclasses_codec import (
-    encode, decode, to_dict, from_dict,
+    encode, decode, to_dict, from_dict, to_json, from_json,
     json_codec, JSONCodec
 )
 from dataclasses_codec.errors import CodecError
@@ -49,37 +48,37 @@ class TestEncodeDecode(unittest.TestCase):
     def test_encode_default_codec(self):
         obj = SimpleClass("Alice", 30)
         result = encode(obj)
-        expected = json.dumps({"name": "Alice", "age": 30})
+        expected = '{"name": "Alice", "age": 30}'
         self.assertEqual(result, expected)
     
     def test_encode_custom_codec(self):
         obj = SimpleClass("Alice", 30)
         custom_codec = TestCodec()
         result = encode(obj, codec=custom_codec)
-        expected = json.dumps({"name": "test_Alice", "age": 30})
+        expected = '{"name": "test_Alice", "age": 30}'
         self.assertEqual(result, expected)
     
     def test_encode_with_kwargs(self):
         obj = SimpleClass("Alice", 30)
         result = encode(obj, to_camel_case=True)
-        expected = json.dumps({"name": "Alice", "age": 30})  # No change for simple case
+        expected = '{"name": "Alice", "age": 30}'  # No change for simple case
         self.assertEqual(result, expected)
     
     def test_decode_default_codec(self):
-        data = json.dumps({"name": "Alice", "age": 30})
+        data = '{"name": "Alice", "age": 30}'
         result = decode(SimpleClass, data)
         expected = SimpleClass("Alice", 30)
         self.assertEqual(result, expected)
     
     def test_decode_custom_codec(self):
-        data = json.dumps({"name": "test_Alice", "age": 30})
+        data = '{"name": "test_Alice", "age": 30}'
         custom_codec = TestCodec()
         result = decode(SimpleClass, data, codec=custom_codec)
         expected = SimpleClass("Alice", 30)
         self.assertEqual(result, expected)
     
     def test_decode_with_kwargs(self):
-        data = json.dumps({"name": "Alice", "age": 30})
+        data = '{"name": "Alice", "age": 30}'
         result = decode(SimpleClass, data, to_snake_case=True)
         expected = SimpleClass("Alice", 30)
         self.assertEqual(result, expected)
@@ -104,44 +103,44 @@ class TestEncodeDecode(unittest.TestCase):
         self.assertEqual(original, restored)
 
 
-class TestToJsonFromJson(unittest.TestCase):
-    def test_to_json_default(self):
+class TestToDictFromDict(unittest.TestCase):
+    def test_to_dict_default(self):
         obj = SimpleClass("Alice", 30)
         result = to_dict(obj)
         expected = {"name": "Alice", "age": 30}
         self.assertEqual(result, expected)
     
-    def test_to_json_camel_case(self):
+    def test_to_dict_camel_case(self):
         obj = SnakeCaseClass("Alice", 30)
         result = to_dict(obj, to_camel_case=True)
         expected = {"userName": "Alice", "userAge": 30}
         self.assertEqual(result, expected)
     
-    def test_to_json_with_kwargs(self):
+    def test_to_dict_with_kwargs(self):
         obj = SimpleClass("Alice", 30)
         result = to_dict(obj, separators=(',', ':'))
         expected = {"name":"Alice","age":30}
         self.assertEqual(result, expected)
     
-    def test_from_json_default(self):
+    def test_from_dict_default(self):
         data = {"name": "Alice", "age": 30}
         result = from_dict(SimpleClass, data)
         expected = SimpleClass("Alice", 30)
         self.assertEqual(result, expected)
     
-    def test_from_json_snake_case(self):
+    def test_from_dict_snake_case(self):
         data = {"userName": "Alice", "userAge": 30}
         result = from_dict(SnakeCaseClass, data, to_snake_case=True)
         expected = SnakeCaseClass("Alice", 30)
         self.assertEqual(result, expected)
     
-    def test_from_json_with_kwargs(self):
+    def test_from_dict_with_kwargs(self):
         data = {"name":"Alice","age":30}
         result = from_dict(SimpleClass, data)
         expected = SimpleClass("Alice", 30)
         self.assertEqual(result, expected)
     
-    def test_round_trip_json(self):
+    def test_round_trip_dict(self):
         original = SimpleClass("Alice", 30)
         
         data = to_dict(original)
@@ -150,7 +149,7 @@ class TestToJsonFromJson(unittest.TestCase):
         
         self.assertEqual(original, restored)
     
-    def test_round_trip_json_camel_case(self):
+    def test_round_trip_dict_camel_case(self):
         original = SnakeCaseClass("Alice", 30)
         
         data = to_dict(original, to_camel_case=True)
@@ -159,6 +158,61 @@ class TestToJsonFromJson(unittest.TestCase):
         
         self.assertEqual(original, restored)
 
+
+class TestToJsonFromJson(unittest.TestCase):
+    def test_to_dict_default(self):
+        obj = SimpleClass("Alice", 30)
+        result = to_json(obj)
+        expected = '{"name": "Alice", "age": 30}'
+        self.assertEqual(result, expected)
+    
+    def test_to_json_camel_case(self):
+        obj = SnakeCaseClass("Alice", 30)
+        result = to_json(obj, to_camel_case=True)
+        expected = '{"userName": "Alice", "userAge": 30}'
+        self.assertEqual(result, expected)
+    
+    def test_to_json_with_kwargs(self):
+        obj = SimpleClass("Alice", 30)
+        result = to_json(obj, separators=(',', ':'))
+        expected = '{"name":"Alice","age":30}'
+        self.assertEqual(result, expected)
+    
+    def test_from_json_default(self):
+        data = '{"name": "Alice", "age": 30}'
+        result = from_json(SimpleClass, data)
+        expected = SimpleClass("Alice", 30)
+        self.assertEqual(result, expected)
+    
+    def test_from_json_snake_case(self):
+        data = '{"userName": "Alice", "userAge": 30}'
+        result = from_json(SnakeCaseClass, data, to_snake_case=True)
+        expected = SnakeCaseClass("Alice", 30)
+        self.assertEqual(result, expected)
+    
+    def test_from_json_with_kwargs(self):
+        data = '{"name":"Alice","age":30}'
+        result = from_json(SimpleClass, data)
+        expected = SimpleClass("Alice", 30)
+        self.assertEqual(result, expected)
+    
+    def test_round_trip_json(self):
+        original = SimpleClass("Alice", 30)
+        
+        data = to_json(original)
+        
+        restored = from_json(SimpleClass, data)
+        
+        self.assertEqual(original, restored)
+    
+    def test_round_trip_json_camel_case(self):
+        original = SnakeCaseClass("Alice", 30)
+        
+        data = to_json(original, to_camel_case=True)
+        
+        restored = from_json(SnakeCaseClass, data, to_snake_case=True)
+        
+        self.assertEqual(original, restored)
 
 class TestDefaultCodecs(unittest.TestCase):
     def test_json_codec_default(self):
@@ -182,7 +236,7 @@ class TestDefaultCodecs(unittest.TestCase):
         self.assertIn("not a dataclass", str(context.exception))
     
     def test_decode_with_missing_fields(self):
-        data = json.dumps({"name": "Alice"})  # Missing 'age'
+        data = '{"name": "Alice"}'  # Missing 'age'
         with self.assertRaises(CodecError) as context:
             decode(SimpleClass, data)
         self.assertIn("missing field", str(context.exception))
@@ -207,7 +261,7 @@ class TestDefaultCodecs(unittest.TestCase):
     
     def test_invalid_dataclass_type(self):
         with self.assertRaises(CodecError) as context:
-            decode(str, json.dumps({"test": "value"}))
+            decode(str, '{"test": "value"}')
         self.assertIn("not a dataclass", str(context.exception))
     
     def test_wrong_data_type(self):
