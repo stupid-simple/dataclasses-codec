@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dataclasses-codec"
-version = "0.1.0"
+version = "1.0.0"
 description = "Simple Python dataclass serialization package with no dependencies"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -14,7 +14,7 @@ authors = [
 ]
 keywords = ["dataclass", "serialization", "json", "codec", "encoder", "decoder"]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
