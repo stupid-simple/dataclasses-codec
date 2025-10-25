@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dataclasses-codec"
+version = "0.1.0"
+description = "Simple Python dataclass serialization package with no dependencies"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+    { name = "i-segura", email = "github@m.isu101.com" }
+]
+keywords = ["dataclass", "serialization", "json", "codec", "encoder", "decoder"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://github.com/stupid-simple/dataclasses-codec"
+Repository = "https://github.com/stupid-simple/dataclasses-codec"
+Issues = "https://github.com/stupid-simple/dataclasses-codec/issues"
+Documentation = "https://github.com/stupid-simple/dataclasses-codec#readme"
+
+[tool.hatch.build.targets.wheel]
+packages = ["dataclasses_codec"]
+

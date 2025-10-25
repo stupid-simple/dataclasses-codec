@@ -1,11 +1,17 @@
 # StupidSimple Dataclasses Codec
 
+[![PyPI version](https://img.shields.io/pypi/v/dataclasses-codec.svg)](https://pypi.org/project/dataclasses-codec/)
+[![Python versions](https://img.shields.io/pypi/pyversions/dataclasses-codec.svg)](https://pypi.org/project/dataclasses-codec/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Tests](https://github.com/stupid-simple/dataclasses-codec/actions/workflows/test.yml/badge.svg)](https://github.com/stupid-simple/dataclasses-codec/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/stupid-simple/dataclasses-codec/branch/main/graph/badge.svg)](https://codecov.io/gh/stupid-simple/dataclasses-codec)
+
 This native Python package allows to easily convert dataclasses into and from a serialized form. By default supports json.
 
 ## Installation
 
 ```bash
-pip install stupidsimple-dataclass-codec
+pip install dataclasses-codec
 ```
 
 ## Usage
