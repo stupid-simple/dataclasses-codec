@@ -29,10 +29,10 @@ class MyDataclass:
 
 obj = MyDataclass("John", "Doe")
 
-# Serializable Python dictionary
+# Serializable Python dictionary. JSON by default.
 encoded = encode(obj)
 print(encoded)
-# Output: {'first_name': 'John', 'last_name': 'Doe'}
+# Output: {"first_name": "John", "last_name": 'Doe'}
 
 decoded = decode(MyDataclass, encoded)
 print(decoded)
@@ -53,7 +53,7 @@ print(restored)
 
 The JSON codec is a first class citizen of the package. It allows to easily convert dataclasses into and from JSON strings.
 
-Serialization can be customized by using the `json_field` value. It supports native conversion of `date` and `datetime` fields. Dataclasses can be nested to form complex objects.
+Serialization can be customized by using the `json_field` value. It supports native conversion of `date` and `datetime` fields. Dataclasses can be nested to form complex objects. It supports `list`, `tuple`, `dict` and `Union` types.
 
 `json_field` extends the native dataclass `field` decorator to support custom serialization and deserialization.
 
@@ -66,9 +66,12 @@ import datetime as dt
 # Still a dataclass, so we can use its features like slots, frozen, etc.
 @dataclass(slots=True)
 class MyMetadataDataclass:
-    created_at: dt.datetime
-    updated_at: dt.datetime = json_field(
-        serializer=lambda d: d.isoformat(),
+    created_at: dt.datetime = field( # Dataclasses fields can be used as usual
+        default_factory=lambda: dt.datetime.now()
+    )
+    updated_at: dt.datetime = json_field( # Json field also supports dataclasses field features.
+        default_factory=lambda: dt.datetime.now(),
+        serializer=lambda d: d.isoformat(), # Custom serializer to isoformat
         deserializer=lambda s: dt.datetime.fromisoformat(s)
     )
     enabled: bool | JSONOptional = JSON_MISSING # Explicitly mark a field as optional
