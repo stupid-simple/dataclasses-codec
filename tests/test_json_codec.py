@@ -9,6 +9,7 @@ from decimal import Decimal
 from typing import List, Optional, Union, Any, Dict
 from dataclasses_codec import JSONCodec, json_field, JSON_MISSING
 from dataclasses_codec.errors import CodecError
+from uuid import UUID
 
 
 @dataclass
@@ -355,3 +356,14 @@ class TestJSONCodec(unittest.TestCase):
         encoded = self.codec.to_json(original)
         decoded = self.codec.from_json(DecimalClass, encoded)
         self.assertEqual(decoded.amount, original.amount)
+
+    def test_uuid_roundtrip(self):
+        """UUID survives encode/decode roundtrip."""
+        @dataclass
+        class UUIDClass:
+            id: UUID
+
+        original = UUIDClass(UUID("123e4567-e89b-12d3-a456-426614174000"))
+        encoded = self.codec.to_json(original)
+        decoded = self.codec.from_json(UUIDClass, encoded)
+        self.assertEqual(decoded.id, original.id)
