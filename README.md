@@ -53,7 +53,16 @@ print(restored)
 
 The JSON codec is a first class citizen of the package. It allows to easily convert dataclasses into and from JSON strings.
 
-Serialization can be customized by using the `json_field` value. It supports native conversion of `date` and `datetime` fields. Dataclasses can be nested to form complex objects. It supports `list`, `tuple`, `dict` and `Union` types.
+Serialization can be customized by using the `json_field` value. It supports native conversion of:
+- Types already supported by the native `json` module.
+- `date`
+- `datetime`
+- `timedelta`
+- `Decimal`
+- `UUID`
+- `Path`
+
+Dataclasses can be nested to form complex objects. It supports `list`, `tuple`, `dict` and `Union` types.
 
 `json_field` extends the native dataclass `field` decorator to support custom serialization and deserialization.
 
