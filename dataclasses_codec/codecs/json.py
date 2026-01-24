@@ -10,7 +10,9 @@ from typing import (
 )
 from dataclasses import MISSING, Field, field, fields, is_dataclass
 from types import NoneType, UnionType
-
+from decimal import Decimal
+from uuid import UUID
+from pathlib import Path
 from ..core import Codec
 from ..errors import CodecError
 
@@ -214,6 +216,18 @@ def _encode(obj: Any, *_: Any, to_camel_case: bool) -> Any:
 
     if isinstance(obj, dt.datetime):
         return obj.isoformat()
+    
+    if isinstance(obj, dt.timedelta):
+        return obj.total_seconds()
+    
+    if isinstance(obj, Decimal):
+        return str(obj)
+    
+    if isinstance(obj, UUID):
+        return str(obj)
+
+    if isinstance(obj, Path):
+        return str(obj)
 
     if isinstance(obj, (list, tuple)):
         return [
@@ -298,6 +312,14 @@ def _decode_field(
         val = dt.date.fromisoformat(val)
     elif typ is dt.datetime:
         val = dt.datetime.fromisoformat(val)
+    elif typ is Decimal:
+        val = Decimal(val)
+    elif typ is UUID:
+        val = UUID(val)
+    elif typ is Path:
+        val = Path(val)
+    elif typ is dt.timedelta:
+        val = dt.timedelta(seconds=val)
     elif typ is NoneType:
         if val is not None:
             raise ValueError(f"expected None got: {val!r}")
