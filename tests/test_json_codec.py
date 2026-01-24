@@ -10,6 +10,7 @@ from typing import List, Optional, Union, Any, Dict
 from dataclasses_codec import JSONCodec, json_field, JSON_MISSING
 from dataclasses_codec.errors import CodecError
 from uuid import UUID
+from pathlib import Path
 
 
 @dataclass
@@ -367,3 +368,14 @@ class TestJSONCodec(unittest.TestCase):
         encoded = self.codec.to_json(original)
         decoded = self.codec.from_json(UUIDClass, encoded)
         self.assertEqual(decoded.id, original.id)
+
+    def test_path_roundtrip(self):
+        """Path survives encode/decode roundtrip."""
+        @dataclass
+        class PathClass:
+            path: Path
+
+        original = PathClass(Path("test.txt"))
+        encoded = self.codec.to_json(original)
+        decoded = self.codec.from_json(PathClass, encoded)
+        self.assertEqual(decoded.path, original.path)
