@@ -379,3 +379,14 @@ class TestJSONCodec(unittest.TestCase):
         encoded = self.codec.to_json(original)
         decoded = self.codec.from_json(PathClass, encoded)
         self.assertEqual(decoded.path, original.path)
+
+    def test_timedelta_roundtrip(self):
+        """Timedelta survives encode/decode roundtrip."""
+        @dataclass
+        class TimedeltaClass:
+            duration: dt.timedelta
+
+        original = TimedeltaClass(dt.timedelta(seconds=123456.124551))
+        encoded = self.codec.to_json(original)
+        decoded = self.codec.from_json(TimedeltaClass, encoded)
+        self.assertEqual(decoded.duration, original.duration)

@@ -217,6 +217,9 @@ def _encode(obj: Any, *_: Any, to_camel_case: bool) -> Any:
     if isinstance(obj, dt.datetime):
         return obj.isoformat()
     
+    if isinstance(obj, dt.timedelta):
+        return obj.total_seconds()
+    
     if isinstance(obj, Decimal):
         return str(obj)
     
@@ -315,6 +318,8 @@ def _decode_field(
         val = UUID(val)
     elif typ is Path:
         val = Path(val)
+    elif typ is dt.timedelta:
+        val = dt.timedelta(seconds=val)
     elif typ is NoneType:
         if val is not None:
             raise ValueError(f"expected None got: {val!r}")
