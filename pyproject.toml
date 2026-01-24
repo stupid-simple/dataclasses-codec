@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dataclasses-codec"
-version = "1.0.0"
+version = "1.1.0"
 description = "Simple Python dataclass serialization package with no dependencies"
 readme = "README.md"
 requires-python = ">=3.10"
